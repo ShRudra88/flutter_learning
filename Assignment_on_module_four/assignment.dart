@@ -1,40 +1,54 @@
 import 'dart:io';
 
-void main()
-{
+void main() {
   List<Map> students = [];
-  
-  print("Enter no of Students : ");
-  
-  int numofStudents = int.parse(stdin.readLineSync()!);
+  Set<String> ids = Set();
 
-  Set<int> ids = {};
-  
-  for(int i=0;i<numofStudents;i++)
-    {
-      print('Enter name of the student : ');
+  while (true) {
+    print('\n1.Add  2.View  3.Exit');
+    print('Choice: ');
+    String choice = stdin.readLineSync()!;
 
-      String name = stdin.readLineSync()!;
+    if (choice == '1') {
+      print('Name:'); String name = stdin.readLineSync()!;
+      print('ID:'); String id = stdin.readLineSync()!;
 
-      print('Enter the id of the student : ');
-
-      int id = int.parse(stdin.readLineSync()!);
-
-      if(ids.contains(id)){
-        print('ID already exists');
-      }else {
-        ids.add(id);
+      if (ids.contains(id)) {
+        print('ID exists!');
+        continue;
       }
 
-      print('Enter the score the student get : ');
+      print('Score:');
+      double score = double.parse(stdin.readLineSync()!);
 
-      int score = int.parse(stdin.readLineSync()!);
+      String grade = score >= 80 ? 'A' :
+      score >= 70 ? 'B' :
+      score >= 60 ? 'C' :
+      score >= 50 ? 'D' : 'F';
 
-      students.add({
-        'name': name,
-        'id': id,
-        'score': score
-      });
+      students.add({'name': name, 'id': id, 'score': score, 'grade': grade});
+      ids.add(id);
+      print('Added!');
 
+    } else if (choice == '2') {
+      if (students.isEmpty) {
+        print('No students!');
+        continue;
+      }
+
+      students.sort((a, b) => b['score'].compareTo(a['score']));
+
+      print('\n--- STUDENTS ---');
+      for (var s in students) {
+        print('${s['name']} - ${s['score']} - ${s['grade']}');
+      }
+      print('-----------------');
+      print('\nTotal: ${students.length}');
+      print('Highest: ${students.first['score']}');
+      print('Lowest: ${students.last['score']}');
+
+    } else if (choice == '3') {
+      break;
     }
+  }
 }
